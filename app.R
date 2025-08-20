@@ -1,11 +1,27 @@
 #' Shiny RCI Main File
    
 
-library(devtools)
-install_github("philchalmers/mirt")
-packageVersion("mirt")
+#library(devtools)
+#install_github("philchalmers/mirt")
+#packageVersion("mirt")
 
-setwd("~/Desktop/Shiny-RCI")
+# So that it's using the CRAN version not the GitHub version 
+#remove.packages("mirt")
+#install.packages("mirt") 
+
+
+# Test Run Locally 
+# shinylive::assets_info()
+# shinylive::assets_ensure()
+# shinylive::export(".", "local_export") 
+
+# remotes::install_github("philchalmers/mirt@v1.44.0")
+# packageDescription("mirt")[c("RemoteType","RemoteRef","RemoteSha","Version")]
+# remotes::install_github("philchalmers/SimDesign@v2.20.0")
+# packageDescription("SimDesign")[c("RemoteType","RemoteRef","RemoteSha","Version")]
+
+
+setwd("~/Desktop/Shiny_RCI")
 
 # Load R packages
 library(shiny)

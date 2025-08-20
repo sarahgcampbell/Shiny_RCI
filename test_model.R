@@ -1,8 +1,16 @@
 ## Shiny RCI Pre-loaded Test Models 
 
-library(devtools)
-install_github("philchalmers/mirt")
-packageVersion("mirt")
+#library(devtools)
+#install_github("philchalmers/mirt")
+#packageVersion("mirt")
+
+
+# So that it's using the CRAN version not the GitHub version 
+#remove.packages("SimDesign")
+#install.packages("SimDesign") 
+# Check version 
+#packageDescription("SimDesign")[c("RemoteType","RemoteRef","RemoteRepo","RemoteUsername","Version")]
+
 
 library(mirt)
 library(SimDesign)

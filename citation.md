@@ -1,9 +1,9 @@
 #### Attribution
 
-This App is free and licenced under XXX. Here is how you can cite and reference this app in APA 7. 
+This App is free and licenced under GPL. Here is how you can cite and reference this app in APA 7. 
 <br>
 
-Campbell, S. (2025). *Compute RCI from SD and reliability*. Retrieved from https://github.com/sarahgcampbell 
+Campbell, S. (2025). *RCI Calculator*. Retrieved from https://github.com/sarahgcampbell/Shiny_RCI 
 
 <br>
 <br>
