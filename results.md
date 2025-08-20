@@ -7,10 +7,6 @@ You’d notice that you can only supply one SD, which is usually taken as the pr
 
 <br>
 
-#### Q. What is Fisher information & should I include it?
-bla bla bla 
-
-<br>
 
 #### Q. Should I use the sum score or the vector score when estimating RCI with IRT?
 IRT’s biggest advantage is being able to account for the items’ (i.e., the questions on the test) characteristics. Some items may provide a lot of information about the measured trait, and others may not. Hence, supplying the vector scores can utilize the most out of IRT. 
