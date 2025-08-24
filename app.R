@@ -43,6 +43,7 @@ models <- list(
     The simulated model used 5000 response vectors, estimated item parameters were measured by RMSD,
      where all item parameters RMSD were <0.1 (except for the 3rd threshold parameter, RMSD = 0.12).",
     item_names = BDI2item_names,
+    cat = 3,   # the max category input number is 3 (0,1,2,3)
     max_score = 21*3,
     jitems = 21
   ),
@@ -54,6 +55,7 @@ models <- list(
     The simulated model used 5000 response vectors, estimated item parameters were measured by RMSD, 
     where all item parameters RMSD were <0.06.",
     item_names = PHQ9item_names,
+    cat = 3, 
     max_score = 9*3,
     jitems = 9
   ),
@@ -65,6 +67,7 @@ models <- list(
     The simulated model used 5000 response vectors, estimated item parameters were measured by RMSD, 
     where all item parameters RMSD were <0.08).",
     item_names = GAD7item_names,
+    cat = 3, 
     max_score = 7*3,
     jitems = 7
   )
@@ -165,9 +168,11 @@ ui <- fluidPage(
                           textOutput(outputId = "results"),         ## summary text
                           hr(),
                           tableOutput(outputId = "RCtable"),        ## for indv. numeric output
+                          
+                          plotOutput(outputId = "rci_plot"),       ## CTT & EAPsum plot
+                          
                           uiOutput(outputId = "LookUpTitle"),      ## For lookup table's title
-                          tableOutput(outputId = "LookUp"),        ## For lookup table (CTT & EApsum)
-                          plotOutput(outputId = "rci_plot")       ## CTT plot
+                          tableOutput(outputId = "LookUp")        ## For lookup table (CTT & EApsum)
                           
                           ) # conditionalPanel()
                      
@@ -178,8 +183,8 @@ ui <- fluidPage(
              
              
              
-             tabPanel("Results Explained",
-                      div(includeMarkdown("results.md"))),
+             tabPanel("Start Here!",
+                      div(includeMarkdown("start.md"))),
   
              
              tabPanel("Computation Explanation",
@@ -284,7 +289,7 @@ server <- function(input, output){
       SEM <- SEM()
       scores <- scores()
       
-      # 1. Status: chnaged or not
+      # 1. Status: changed or not
       RCIresults$status <- if (scores$p <.05){"Change Status: Reliably Changed (p < .05)"}
       else {"Change Status: Did Not Reliably Change (p >= .05)"}
       
@@ -306,8 +311,8 @@ server <- function(input, output){
       results_table <- lapply(postsc, \(x) {
         R <- RCI(predat = presc, postdat = x, SEM.pre = SEM)
         data.frame(Difference = x - presc,
-                   Z = round(R$z, 2),
-                   P = signif(R$p, 3))
+                   RCI = round(R$z, 2),
+                   "P-value" = signif(R$p, 3))
       })
       
       # Since "results" is a list of 10 dataframes (one per post score),
@@ -410,6 +415,7 @@ server <- function(input, output){
       IRTmodel <- model_choice$model  # model = BDI2mod, PHQ9mod, GAD7mod
       max_score <- model_choice$max_score
       jitems <- model_choice$jitems
+      cat <- model_choice$cat
 
       
       
@@ -478,6 +484,79 @@ server <- function(input, output){
         
         
         
+        # 5. Plot EAPsum
+        
+        # Fixed Pre vs Varied Post 
+        df <- tab |>
+          dplyr::mutate(  # add new columns
+            # The diff between each possible post score (F1) and the fixed pre score (theta_pre) from above 
+            # Gives me a vector of all possible change scores
+            diff = F1 - theta_pre, 
+            # SEM for each possible post SE (SE_F1)and the fixed pre SE
+            SEM_diff = sqrt(SE_F1^2 + sem_pre^2),
+            # confidence bands
+            upper = diff + SEM_diff,
+            lower = diff - SEM_diff)
+        
+        # Observed post-test points
+        observed_point <- data.frame(
+          # The actual post/pre-test sum score
+          post_sum = input$posttest,
+          pre_sum = input$pretest,
+          # The estimated post-pre theta diff
+          obs_diff = theta_post - theta_pre, # post_row$F1 = theta_post
+          pre_diff = 0)    
+        
+        
+        # Set fix axis limits 
+        # X-axis max is the max_score
+        # Y-axis max is the max possible "theta" diff (not sum score diff)
+        min_theta <- min(tab$F1)
+        max_theta <- max(tab$F1)
+        # Symmetrical limit is the largest possible changee + a 5% buffer for aesthetics
+        y_axis <- (max_theta - min_theta) * 1.05
+        
+        
+        RCIresults$rciplot <- ggplot(df, aes(x = Sum.Scores, y = diff)) +
+          geom_ribbon(aes(ymin = lower, ymax = upper), 
+                      fill = "grey", alpha = 0.5) +
+          # Make a line plot
+          # geom_line(color = "black") +
+          
+          geom_point(
+            data = df |> dplyr::filter(Sum.Scores %% 5 == 0), # dots with filter of 5
+            aes(x = Sum.Scores, y = diff),
+            color = "black", size = 2
+          ) +
+          
+          
+          # Horizontal line dashed at 0 diff (no change)
+          geom_hline(yintercept = 0, linetype = "dashed", color = "black") +
+          
+          # Add the observed post-test score as a prominent red dot
+          geom_point(data = observed_point, aes(x = post_sum, y = obs_diff),
+                     color = "red", size = 4, shape = 16) +
+          # Add pre-test score as blue dot 
+          geom_point(data = observed_point, aes(x = pre_sum, y = pre_diff),
+                     color = "blue", size = 4, shape = 16) +
+          
+          
+          # Fixed limits
+          coord_cartesian(
+            xlim = c(0, max_score),
+            ylim = c(-y_axis, y_axis)) +
+          
+          labs(
+            title = paste("SEM Estimates with a Fixed Pre-Test Score of", input$pretest),
+            x = "Sum Score",
+            y = expression(paste(" ", theta[post] - theta[pre]," ")),
+            caption = "Red dot is the observed post-test score and its change in theta; Blue dot is the pre-test score."
+          ) +
+          theme_bw(base_size = 14) # The classic dark-on-light ggplot2 theme
+        
+        
+        
+        
         # --- For all other IRT methods (EAP, MAP, WLE, ML) --- 
       } else { 
         # For vector scores
@@ -487,9 +566,10 @@ server <- function(input, output){
         postS <- as.numeric(strsplit(input$postvec, "")[[1]])
          
          if (anyNA(preS) || anyNA(postS) || 
-             length(preS) != jitems || length(postS) != jitems){
+             length(preS) != jitems || length(postS) != jitems
+             || preS > cat || postS > cat){
            RCIresults$status <- paste("Error: Vector scores need to be the same length as the test items.
-                                      This test has", jitems, "items.")
+                                      This test has", jitems, "items, each item value can range from 0 to", cat,".")
            return()
          }
         
