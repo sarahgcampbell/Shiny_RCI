@@ -43,6 +43,10 @@ The **weighted maximum-likelihood (WML)** estimation was used by Jabrayilov et a
 
 The **expected a posteriori (EAP)** estimation was used by Chalmers and Campbell (2025), in which a prior population distribution of the latent trait (i.e., you can think of this as the characteristics of the group in which the individual belongs to) is incorporated in the estimation of $\hat{\theta}$. This was also done to reduce bias, and does a better job at estimating individual's change than WML when the individual actually changed. Though any IRT estimation perform far better than CTT. 
 
+The **EAPsum** estimation method uses the expected value of the posterior distribution conditioned on the sum score, not the full response pattern. EAPsum precomputes the EAP estimates for all possible raw sum scores within the test's score range. Instead of using the expected posterior for each of the item response vectors to compute the posterior distribution (as in EAP), EAPsum marginalizes over all response patterns that lead to the same total score. Then, EAPsum computes the expected value of the marginal posterior, conditioned only on the sum score.
+
+Other estimation methods, such as ML, WML, MAP, or EAP, do not have algorithms for directly estimating ability from sum scores; instead require the full item response vector as the likelihood depends on the item-level data.
+
 <br>
 <br>
 

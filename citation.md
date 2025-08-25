@@ -3,7 +3,7 @@
 This App is free and licenced under GPL. Here is how you can cite and reference this app in APA 7. 
 <br>
 
-Campbell, S. (2025). *RCI Calculator*. Retrieved from https://github.com/sarahgcampbell/Shiny_RCI 
+Campbell, S. (2025). *Shiny RCI Calculator*. Retrieved from https://github.com/sarahgcampbell/Shiny_RCI 
 
 <br>
 <br>
@@ -23,12 +23,11 @@ Chalmers, R. P. (2012). mirt: A multidimensional item response theory package fo
 **IRT-RCI with EAP by Chalmers & Campbell (2025):**\
 Chalmers, R. P., & Campbell, S. (2025). Including Empirical Prior Information in the Reliable Change Index. *Applied Psychological Measurement*, *0*(0), 1-17. https://doi.org/10.1177/01466216251358492
 
+**The paper that used Omega as their reliability estimate:**\
+Lee, M. K., Peipert, J. D., Cella, D., Yost, K. J., Eton, D. T., Novotny, P. J., Sloan, J. A., & Dueck, A. C. (2022). Identifying meaningful change on PROMIS short forms in cancer patients: A comparison of item response theory and classic test theory frameworks. *Quality of Life Research*, *32*(5), 1355–1367. https://doi.org/10.1007/s11136-022-03255-3
 
 **If wanna know more about why IRT can be great in clinical contexts:**\
 Thomas, M. L. (2011). The value of item response theory in clinical assessment: A Review. *Assessment*, *18*(3), 291-307. https://doi.org/10.1177/1073191110374797 
-
-**The paper that used Omega as their reliability estimate:**\
-Lee, M. K., Peipert, J. D., Cella, D., Yost, K. J., Eton, D. T., Novotny, P. J., Sloan, J. A., & Dueck, A. C. (2022). Identifying meaningful change on PROMIS short forms in cancer patients: A comparison of item response theory and classic test theory frameworks. *Quality of Life Research*, *32*(5), 1355–1367. https://doi.org/10.1007/s11136-022-03255-3
 
 **If you also want to make some cool cat memes:**\
 Imgflip. (n.d.). *Meme Generator*. https://imgflip.com/memegenerator

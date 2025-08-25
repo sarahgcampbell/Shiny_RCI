@@ -95,7 +95,7 @@ ui <- fluidPage(
                             condition = "input.model == 'JTRCI'",
                             hr(),
                             numericInput(inputId = "rxx", "Reliability", value = 0.9),
-                            numericInput(inputId = "SD", "Standard deviation (SD)", value = 2.5) # placeholder
+                            numericInput(inputId = "SD", "Standard deviation (SD)", value = 1.0) # placeholder
                             # selectInput(inputId = "alpha", label = "Critical Value",
                                         # choices = c("α = 0.05" = "0.05", "α = 0.10" = "0.10"))
                           ), # conditionalPanel()
@@ -312,7 +312,8 @@ server <- function(input, output){
         R <- RCI(predat = presc, postdat = x, SEM.pre = SEM)
         data.frame(Difference = x - presc,
                    RCI = round(R$z, 2),
-                   "P-value" = signif(R$p, 3))
+                   "P-value" = signif(R$p, 3),
+                   check.names = FALSE)
       })
       
       # Since "results" is a list of 10 dataframes (one per post score),
@@ -465,7 +466,7 @@ server <- function(input, output){
           Difference = theta_post - theta_pre,
           "SE" = sem,
           RCI = rci, "P-value" = p_val,
-          check.names = FALSE # Preserves how the colum names are displayed (if took out would have "P.value" instead of P-value")
+          check.names = FALSE # Preserves how the column names are displayed (if took out would have "P.value" instead of P-value")
         )
 
         # 1. Status: Changed or not
@@ -567,7 +568,7 @@ server <- function(input, output){
          
          if (anyNA(preS) || anyNA(postS) || 
              length(preS) != jitems || length(postS) != jitems
-             || preS > cat || postS > cat){
+             || any(preS > cat) || any(postS > cat)){
            RCIresults$status <- paste("Error: Vector scores need to be the same length as the test items.
                                       This test has", jitems, "items, each item value can range from 0 to", cat,".")
            return()
