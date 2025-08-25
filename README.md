@@ -1,8 +1,8 @@
 # Shiny_RCI
-Files associated with Shiny RCI project.
+Files associated with Shiny RCI Calculator.
 
 
-**Last update:** 2025-08-20
+**Last update:** 2025-08-25
 
 ## Run App on R Studio 
 To run the app locally on R studio:
