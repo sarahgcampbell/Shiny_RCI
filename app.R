@@ -2,18 +2,36 @@
    
 
 #library(devtools)
-#install_github("philchalmers/mirt")
+#install_github("philchalmers/mirt")  #v1.44.6
 #packageVersion("mirt")
 
 # So that it's using the CRAN version not the GitHub version 
 #remove.packages("mirt")
 #install.packages("mirt") 
 
+#if (!requireNamespace("mirt","SimDesign", quietly = TRUE)) {
+#  webr::install("mirt",
+#                repos = c("https://philchalmers.r-universe.dev", "https://repo.r-wasm.org"))
+#}
 
+
+### For Running ShinyLive w/ GH pages 
 # Test Run Locally 
 # shinylive::assets_info()
+# shinylive::assets_remove("0.9.1")
 # shinylive::assets_ensure()
 # shinylive::export(".", "local_export") 
+# shinylive::export(".", "local_export", wasm_packages = FALSE)
+# shinylive::export("/Users/sarahcampbell/Desktop/Shiny_RCI", "local_export")
+# httpuv::runStaticServer("local_export")
+# browseURL("http://127.0.0.1:7446/") 
+
+# httpuv::runStaticServer("local_export", port = 7447, background = TRUE)
+# browseURL("http://127.0.0.1:7447/")
+
+
+
+
 
 # remotes::install_github("philchalmers/mirt@v1.44.0")
 # packageDescription("mirt")[c("RemoteType","RemoteRef","RemoteSha","Version")]
@@ -21,13 +39,19 @@
 # packageDescription("SimDesign")[c("RemoteType","RemoteRef","RemoteSha","Version")]
 
 
-setwd("~/Desktop/Shiny_RCI")
+### For Shinyapps.io
+#library(rsconnect)
+#rsconnect::deployApp('path/to/your/app')
+
+#setwd("~/Desktop/Shiny_RCI")
 
 # Load R packages
 library(shiny)
 library(shinythemes)
-library(mirt)
+library(mirt)  #v1.44.0
+library(SimDesign) #v2.20.0
 library(ggplot2)
+library(markdown) # apparently the whole fuss is bcz I didnt load the markdown package ==
 source("test_model.R")
 
 
@@ -76,6 +100,13 @@ models <- list(
 
 # ui
 ui <- fluidPage(
+  
+  
+  tags$head(tags$style(HTML("
+  .shiny-image-output img { position: static !important; display:block; }
+  .shiny-image-output { display:flex; flex-direction:column; align-items:center; gap:8px; }"))),
+  
+  
   navbarPage("RCI Calculator",
              
              tabPanel("Results",
@@ -151,10 +182,10 @@ ui <- fluidPage(
                         mainPanel(
                           
                           conditionalPanel(condition = "input.computebutton == 0",
-                                           div(imageOutput("meme"),
-                                           align = "center",
-                                           h4("Enter pre & post scores to see whether the individual actually changed!"))),
-                          
+                                           div(imageOutput("meme", width = "680px", height = "auto"), align = "center", 
+                                               h4("Enter pre & post scores to see whether the individual actually changed!"))
+                          ),
+                     
                           conditionalPanel(condition = "input.computebutton > 0",
                                            
                           # output 
@@ -254,7 +285,7 @@ server <- function(input, output){
   
   # The meme
   output$meme <- renderImage({
-    list(src = "www/meme.png", contentType = "image/png", width = "95%")
+    list(src = "www/meme.png", contentType = "image/png", width = "95%") #680
   }, deleteFile = FALSE)
   
   
