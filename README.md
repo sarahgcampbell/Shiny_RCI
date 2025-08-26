@@ -4,6 +4,9 @@ Files associated with Shiny RCI Calculator.
 
 **Last update:** 2025-08-25
 
+## Run App on Shinyapps.io
+<https://sarahcampbell.shinyapps.io/Shiny_RCI/>
+
 ## Run App on R Studio 
 To run the app locally on R studio:
 ```r
